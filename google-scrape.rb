@@ -32,11 +32,11 @@ end
 
  #get_descriptions(found_pages)
 
- #existing sites
- #Go to specified URL, crawl new URLs
+ 
 
 def get_links(this_page)
   #output links to csv
+  #existing sites; go to specified URL, crawl new URLs
   #example uses Nokogiri css selectors to find linkes on this specific page; this will only work with the example link
 
   doc = Nokogiri::HTML(open(this_page))
@@ -50,4 +50,83 @@ def get_links(this_page)
 
 end
 
-get_links("http://dancetabs.com/category/reviews-of-dance-and-ballet-performances/")
+#get_links("http://dancetabs.com/category/reviews-of-dance-and-ballet-performances/")
+
+
+def get_text(text_page)
+  #go to each link from get_links, scrape text; all text looks like just p?
+  #open csv, each row, new csv, add columns
+  doc = Nokogiri::HTML(open(text_page))
+  text = doc.css('p').text
+  keywords = ["pow wow", "Royal", "ballet",
+"hula"  ,
+"hip hop" ,
+"two step"  ,
+"waltz" ,
+"polka" ,
+"bharatanatyam" ,
+"bharata natyam"  ,
+"ballerina" ,
+"jazz"  ,
+"breakdancing"  ,
+"salsa" ,
+"meringue"  ,
+"flamenco"  ,
+"contradanse" ,
+"contradanc*" ,
+"western squares" ,
+"ballroom"  ,
+"capoeira"  ,
+"danc*" ,
+"go-go" ,
+"pirouette" ,
+"arabesque" ,
+"kathak"  ,
+"b-boying"  ,
+"gangnum" ,
+"tap" ,
+"electric slide"  ,
+"moonwalk"  ,
+"tango" ,
+"mambo" ,
+"twist" ,
+"charleston"  ,
+"quickstep" ,
+"jive"  ,
+"bollywood" ,
+"disco "  ,
+"rave"  ,
+"jookin"  ,
+"locking" ,
+"popping" ,
+"pop and lock"  ,
+"electric boogaloo" ,
+"stepping",
+"jig" ,
+"clogging"  ,
+"shim sham" ,
+"foxtrot" ,
+"butoh" ,
+"tarantella"  ,
+"swing" ,
+"bhangra" ,
+"kathakali" ,
+"kuchipudhi"  ,
+"Mohiniyattam"  ,
+"Odissi"  ,
+"Sattriya"  ,
+"garba",
+"Royal"]
+
+  if keywords.any? { |w| text =~ /#{w}/ }
+    matches = []
+    keywords.each do |kywd| text.match(kywd) != nil ? matches << text.match(kywd) : "nothing"
+  end
+  p matches
+  else
+    puts "nope."
+  end
+
+end
+
+get_text("http://dancetabs.com/2015/06/the-royal-ballet-the-dream-song-of-the-earth-new-york/")
