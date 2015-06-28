@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'metainspector'
 require 'csv'
 
-doc = Nokogiri::HTML(open("http://www.google.com/search?num=10&q=%22Aimee+Tsao%22+bay+area+dance+-linkedin"))
+doc = Nokogiri::HTML(open("http://www.google.com/search?num=100&q=%22Aimee+Tsao%22+bay+area+dance+-linkedin"))
 
 found_pages = []
 doc.css('cite').each do |cite|  
@@ -12,7 +12,7 @@ end
  #print found_pages
 
  def get_descriptions(urls)
-    CSV.open("urls.csv", "wb")do |csv|
+    CSV.open("urls-100.csv", "wb")do |csv|
     csv << ["page title", "url", "description"]
     end
 
@@ -21,7 +21,7 @@ add_em = []
    urls.each do |url|
    page = MetaInspector.new(url)
    add_em =[page.title,page.url,page.description]
-    CSV.open("urls.csv", "a+")do |csv|
+    CSV.open("urls-100.csv", "a+")do |csv|
     csv << add_em
     end
   end
