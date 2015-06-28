@@ -15,16 +15,16 @@ doc.css('cite').each do |cite|
 end 
 
  def get_descriptions(urls)
-    CSV.open("urls.csv", "wb")do |csv|
+    CSV.open("urls-2.csv", "wb")do |csv|
     csv << ["page title", "url", "description"]
     end
   
    add_em = []
 
    urls.each do |url|
-   page = MetaInspector.new(url)
+   page = MetaInspector.new(url, :connection_timeout => 1, :read_timeout => 2, :retries => 0, warn_level: :store)
    add_em =[page.title,page.url,page.description]
-    CSV.open("urls.csv", "a+")do |csv|
+    CSV.open("urls-2.csv", "a+")do |csv|
     csv << add_em
     end
   end
@@ -36,11 +36,13 @@ end
 
 def get_links(this_page)
   #output links to csv
-  #existing sites; go to specified URL, crawl new URLs
+  #Go to specified URL, scrape links/descriptions for new URLs
   #example uses Nokogiri css selectors to find linkes on this specific page; this will only work with the example link
 
   doc = Nokogiri::HTML(open(this_page))
-  links = doc.css('h2 a').map { |link| link['href'] }
+  links = doc.css('li a').map { |link| link['href'] }
+  
+  get_descriptions(links)
   
   CSV.open("links.csv", "w")do |csv|
     links.each do |link|
@@ -50,7 +52,7 @@ def get_links(this_page)
 
 end
 
-#get_links("http://dancetabs.com/category/reviews-of-dance-and-ballet-performances/")
+get_links("http://www.baydance.com/baylinks.htm")
 
 
 def get_text(text_page)
@@ -129,4 +131,7 @@ def get_text(text_page)
 
 end
 
-get_text("http://dancetabs.com/2015/06/the-royal-ballet-the-dream-song-of-the-earth-new-york/")
+def crawler(links)
+  #get links, scrape description, check for keywords, go to site, return new URL as a break
+#get_text("http://dancetabs.com/2015/06/the-royal-ballet-the-dream-song-of-the-earth-new-york/")
+end
