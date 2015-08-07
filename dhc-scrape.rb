@@ -6,7 +6,7 @@ require 'csv'
 #interface should allow user to feed a list of URLs
 #find new sites
 
-doc = Nokogiri::HTML(open("http://www.google.com/search?num=100&q=%22Aimee+Tsao%22+bay+area+dance+-linkedin"))
+doc = Nokogiri::HTML(open("https://www.google.com/search?num=100&q=%22Aimee+Tsao%22+bay+area+dance+-linkedin"))
 
 found_pages = []
 
@@ -60,65 +60,12 @@ def get_text(text_page)
   #open csv, each row, new csv, add columns
   doc = Nokogiri::HTML(open(text_page))
   text = doc.css('p').text
-  keywords = ["pow wow", "Royal", "ballet",
-"hula"  ,
-"hip hop" ,
-"two step"  ,
-"waltz" ,
-"polka" ,
-"bharatanatyam" ,
-"bharata natyam"  ,
-"ballerina" ,
-"jazz"  ,
-"breakdancing"  ,
-"salsa" ,
-"meringue"  ,
-"flamenco"  ,
-"contradanse" ,
-"contradanc*" ,
-"western squares" ,
-"ballroom"  ,
-"capoeira"  ,
-"danc*" ,
-"go-go" ,
-"pirouette" ,
-"arabesque" ,
-"kathak"  ,
-"b-boying"  ,
-"gangnum" ,
-"tap" ,
-"electric slide"  ,
-"moonwalk"  ,
-"tango" ,
-"mambo" ,
-"twist" ,
-"charleston"  ,
-"quickstep" ,
-"jive"  ,
-"bollywood" ,
-"disco "  ,
-"rave"  ,
-"jookin"  ,
-"locking" ,
-"popping" ,
-"pop and lock"  ,
-"electric boogaloo" ,
-"stepping",
-"jig" ,
-"clogging"  ,
-"shim sham" ,
-"foxtrot" ,
-"butoh" ,
-"tarantella"  ,
-"swing" ,
-"bhangra" ,
-"kathakali" ,
-"kuchipudhi"  ,
-"Mohiniyattam"  ,
-"Odissi"  ,
-"Sattriya"  ,
-"garba",
-"Royal"]
+  keywords = ["pow wow", "Royal", "ballet","hula"  ,"hip hop" ,"two step"  ,"waltz" ,"polka" ,"bharatanatyam" ,"bharata natyam"  ,
+"ballerina" , "jazz", "breakdancing"  ,"salsa" ,"meringue"  ,"flamenco"  ,"contradanse" ,"contradanc*" ,"western squares" ,"ballroom"  ,"capoeira"  ,
+"danc*","go-go" ,"pirouette" ,"arabesque" ,"kathak"  ,"b-boying"  ,"gangnum" ,"tap" ,"electric slide"  ,"moonwalk"  ,"tango" ,"mambo" ,"twist" ,
+"charleston"  ,"quickstep" ,"jive"  ,"bollywood" ,"disco "  ,"rave"  ,"jookin"  ,"locking" ,"popping" ,"pop and lock"  ,
+"electric boogaloo" ,"stepping","jig" ,"clogging"  ,"shim sham" ,"foxtrot" ,"butoh" ,"tarantella"  ,"swing" ,"bhangra" ,"kathakali" ,
+"kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
 
   if keywords.any? { |w| text =~ /#{w}/ }
     matches = []
