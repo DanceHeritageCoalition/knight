@@ -75,10 +75,10 @@ class App < Sinatra::Base
             "look at #{@test}"
           end
        # end
-       # "a string mebbe #{@urls.class}"
+      
 
       get_descriptions($found_pages)
-    # "look at this #{$add_em}"
+    
 
   end 
 
