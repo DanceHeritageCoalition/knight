@@ -12,11 +12,6 @@ $found_pages = []
 
 class App < Sinatra::Base
  
-
-
-# create forms and views
-#get scraper: should go to form view.  INput from user populates Nokogiri google URL
-#create variable for result set
 #download or display file?
 
   get "/googlescrape" do
@@ -46,12 +41,12 @@ class App < Sinatra::Base
     "Here are found pages #{$found_pages}"
   end #for /search
 
-  get '/urls' do
+  get '/getdesc' do
     erb :getlinks
 
   end
 
-  post '/getlinks' do
+  post '/descript' do
    #  $urls << params[:links].values
    # "here are #{$urls[0]}"
    #  @urls = $urls.to_s
@@ -78,11 +73,35 @@ class App < Sinatra::Base
       
 
       get_descriptions($found_pages)
-    
+  end #end post /getlinks
 
-  end 
+#get links
 
-  #get links
+ get '/getlinks' do
+    erb :getlinks
+end
+
+post '/links' do
+    def get_links(this_page)
+    #Go to specified URL, scrape links/descriptions for new URLs
+    #example uses Nokogiri css selectors to find linkes on this specific page; this will only work with the example link
+
+      doc = Nokogiri::HTML(open(this_page))
+      links = doc.css('h1 a').map { |link| link['href'] }
+      
+      get_descriptions(links)
+      #start extracting methods from app.rb
+      
+      CSV.open("links.csv", "w")do |csv|
+        links.each do |link|
+          csv << [link]
+        end
+      end
+   end
+   get_links(:params["link1"])
+end #end post /links
+
+  
 
   #get text
 
