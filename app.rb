@@ -1,14 +1,14 @@
 require 'sinatra'
 require 'open-uri'
 require 'csv'
-
 require 'bundler'
 
 $keywords = []
 $exclude = []
 $urls = []
-$add_em = []
 $found_pages = []
+$css_element = []
+$text_page = []
 
 class App < Sinatra::Base
  
@@ -98,35 +98,43 @@ post '/links' do
         end
       end
    end
-   get_links(:params["link1"])
+   $text_page << get_links(:params["link1"])
+   "here is #{$text_page}"
 end #end post /links
 
-  
+get '/gettext' do
+    erb :gettext
+end
+
+post '/text' do
 
   #get text
 
-#   def get_text(text_page)
+  def get_text(text_page)
 #   #go to each link from get_links, scrape text; all text looks like just p?
 #   #open csv, each row, new csv, add columns
-#   doc = Nokogiri::HTML(open(text_page))
-#   text = doc.css('p').text
-#   keywords = ["pow wow", "Royal", "ballet","hula"  ,"hip hop" ,"two step"  ,"waltz" ,"polka" ,"bharatanatyam" ,"bharata natyam"  ,
-# "ballerina" , "jazz", "breakdancing"  ,"salsa" ,"meringue"  ,"flamenco"  ,"contradanse" ,"contradanc*" ,"western squares" ,"ballroom"  ,"capoeira"  ,
-# "danc*","go-go" ,"pirouette" ,"arabesque" ,"kathak"  ,"b-boying"  ,"gangnum" ,"tap" ,"electric slide"  ,"moonwalk"  ,"tango" ,"mambo" ,"twist" ,
-# "charleston"  ,"quickstep" ,"jive"  ,"bollywood" ,"disco "  ,"rave"  ,"jookin"  ,"locking" ,"popping" ,"pop and lock"  ,
-# "electric boogaloo" ,"stepping","jig" ,"clogging"  ,"shim sham" ,"foxtrot" ,"butoh" ,"tarantella"  ,"swing" ,"bhangra" ,"kathakali" ,
-# "kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
+  @doc = Nokogiri::HTML(open(text_page))
+  @text = @doc.css('p').text
+  @keywords = ["pow wow", "Royal", "ballet","hula"  ,"hip hop" ,"two step"  ,"waltz" ,"polka" ,"bharatanatyam" ,"bharata natyam"  ,
+"ballerina" , "jazz", "breakdancing"  ,"salsa" ,"meringue"  ,"flamenco"  ,"contradanse" ,"contradanc*" ,"western squares" ,"ballroom"  ,"capoeira"  ,
+"danc*","go-go" ,"pirouette" ,"arabesque" ,"kathak"  ,"b-boying"  ,"gangnum" ,"tap" ,"electric slide"  ,"moonwalk"  ,"tango" ,"mambo" ,"twist" ,
+"charleston"  ,"quickstep" ,"jive"  ,"bollywood" ,"disco "  ,"rave"  ,"jookin"  ,"locking" ,"popping" ,"pop and lock"  ,
+"electric boogaloo" ,"stepping","jig" ,"clogging"  ,"shim sham" ,"foxtrot" ,"butoh" ,"tarantella"  ,"swing" ,"bhangra" ,"kathakali" ,
+"kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
 
-#   if keywords.any? { |w| text =~ /#{w}/ }
-#     matches = []
-#     keywords.each do |kywd| text.match(kywd) != nil ? matches << text.match(kywd) : "nothing"
-#   end
-#   p matches
-#   else
-#     puts "nope."
-#   end
+    if @keywords.any? { |w| text =~ /#{w}/ }
+      @matches = []
+      @keywords.each do |kywd| text.match(kywd) != nil ? @matches << text.match(kywd) : "nothing"
+        end
+    return @matches
+    else
+      puts "nope."
+    end
 
-end
+  end #get_text method end
+  get_text('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
+
+end #post '/text end'
 
 #   #crawler
 #   def crawler()
@@ -153,5 +161,3 @@ end
 #   end
 
 end
-
-  end
