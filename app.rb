@@ -42,7 +42,7 @@ class App < Sinatra::Base
   end #for /search
 
   get '/getdesc' do
-    erb :getlinks
+    erb :getdesc
 
   end
 
@@ -65,6 +65,7 @@ class App < Sinatra::Base
             $add_em =[page.title,page.url,page.description]
            #  CSV.open("urls-3.csv", "a+")do |csv|
             @test << $add_em
+            $urls << page.url
               
              end
             "look at #{@test}"
@@ -73,7 +74,7 @@ class App < Sinatra::Base
       
 
       get_descriptions($found_pages)
-  end #end post /getlinks
+  end #end post /getdesc
 
 #get links
 
@@ -82,24 +83,41 @@ class App < Sinatra::Base
 end
 
 post '/links' do
-    def get_links(this_page)
+    def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
     #example uses Nokogiri css selectors to find linkes on this specific page; this will only work with the example link
 
-      doc = Nokogiri::HTML(open(this_page))
-      links = doc.css('h1 a').map { |link| link['href'] }
+   #    @doc = Nokogiri::HTML(open(this_page))
+   #    #find href, return class, input
+   #    @links = @doc.css('a')
+   #    @hrefs = @links.map {|link| link.attribute('href')}
+   #    "look at #{@hrefs}"
+   #   # @links = @doc.css('h1 a').map { |link| link['href'] }
       
-      get_descriptions(links)
-      #start extracting methods from app.rb
+   #   # get_descriptions(@links)
+   #    #start extracting methods from app.rb
       
-      CSV.open("links.csv", "w")do |csv|
-        links.each do |link|
-          csv << [link]
-        end
-      end
-   end
-   $text_page << get_links(:params["link1"])
-   "here is #{$text_page}"
+   #    # CSV.open("links.csv", "w")do |csv|
+   #    #   links.each do |link|
+   #    #     csv << [link]
+   #    #   end
+   #    # end
+   # end
+   #$text_page << get_links('http://bayareandw.org/')
+  # "here is #{$text_page}"
+   #@links.class
+
+   #just use mechanize
+   # FIX: links from found pages aren't complete and mechanize won't like them; use attribute from get_desc
+      pages.each {|eek| 
+       agent = Mechanize.new
+       page = agent.get(eek)
+       page.links.each do |link|
+      $text_page << link.text
+      end}
+  "here is #{$text_page}"
+    end
+     get_links($found_pages)
 end #end post /links
 
 get '/gettext' do
