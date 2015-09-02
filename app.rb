@@ -14,7 +14,11 @@ class App < Sinatra::Base
  
 #download or display file?
 
-  get "/googlescrape" do
+get "/" do
+  erb :home
+end
+
+  get "/scrape" do
     #variable = words
     erb :gs
   end
@@ -23,10 +27,7 @@ class App < Sinatra::Base
    $keywords << params[:words].values.join("+").to_s
   #  $exclude << params[:words][0].values[1]
     @keywords_incl1 = params[:words].values.join("+").to_s
-   # @keywords_incl2 = params[:words][0].values[1]
-    #@keywords_excl = params[:words][0].values[2]
-    #{}"Keywords to search for: #{@keywords_incl1}"
-   # "Here are the keywords #{@keywords_incl1}"
+
     "https://www.google.com/search?num=10&q=" + "#{$keywords[0]}"
     end
 
@@ -51,7 +52,6 @@ class App < Sinatra::Base
    # "here are #{$urls[0]}"
    #  @urls = $urls.to_s
     
-
         def get_descriptions(urls)
             
             CSV.open("urls-3.csv", "wb")do |csv|
@@ -65,7 +65,7 @@ class App < Sinatra::Base
             @test << $add_em
               
              end
-            "look at #{@test}"
+            "Here are descriptions #{@test}"
           end
        # end
       
@@ -94,9 +94,9 @@ post '/links' do
             puts exception.to_s
           end
        page.links.each do |link|
-      $text_page << link.text
+        $text_page << link.text
         end
-        end
+      end
     }
 
   "Found links: #{$text_page}"
@@ -110,11 +110,13 @@ get '/gettext' do
 end
 
 post '/text' do
+erb :presults
+
 
   #get text
 
   def get_text(text_page)
-#   #go to each link from get_links, scrape text; all text looks like just p?
+#   #go to each link from get_links, scrape text;
 #   #open csv, each row, new csv, add columns
   @doc = Nokogiri::HTML(open(text_page))
   @text = @doc.css('p').text
@@ -138,8 +140,19 @@ post '/text' do
   end #get_text method end
   get_text('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
 
+
 end #post '/text end'
 
+#return screenshots
+get '/screenshots'
+  def screenshots(urls)
+
+    $urls.each do |url|
+    f = Screencap::Fetcher.new('#{url}')
+    screenshot = f.fetch
+  end
+
+end
 #   #crawler
 #   def crawler()
 #   #get links, scrape description, check for keywords, go to site, return new URL, stop
@@ -164,4 +177,9 @@ end #post '/text end'
 #     end
 #   end
 
+#archive pages
+  get '/archive' do
+    erb :archive
+  end
 end
+
