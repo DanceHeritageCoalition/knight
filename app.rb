@@ -145,8 +145,8 @@ get '/screenshots'
   def screenshots(urls)
 
     $urls.each do |url|
-    f = Screencap::Fetcher.new('#{url}')
-    screenshot = f.fetch
+    @f = Screencap::Fetcher.new('#{url}')
+    @screenshot = f.fetch
   end
 
 end
