@@ -59,8 +59,6 @@ class App < Sinatra::Base
             end
           @test = []
            urls.each do |url|
-           
-            
             page = MetaInspector.new(url, :connection_timeout => 1, :read_timeout => 2, :retries => 0, warn_level: :store)
             $add_em =[page.title,page.url,page.description]
            #  CSV.open("urls-3.csv", "a+")do |csv|
@@ -85,7 +83,7 @@ end
 post '/links' do
     def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
-    #example uses Nokogiri css selectors to find linkes on this specific page; this will only work with the example link
+    #example uses Nokogiri css selectors to find links on this specific page; this will only work with the example link
 
    #    @doc = Nokogiri::HTML(open(this_page))
    #    #find href, return class, input
@@ -117,7 +115,8 @@ post '/links' do
       end}
   "here is #{$text_page}"
     end
-     get_links($found_pages)
+     get_links($urls)  #using links from getdesc
+     #mechanize exits on errors
 end #end post /links
 
 get '/gettext' do
@@ -140,14 +139,15 @@ post '/text' do
 "electric boogaloo" ,"stepping","jig" ,"clogging"  ,"shim sham" ,"foxtrot" ,"butoh" ,"tarantella"  ,"swing" ,"bhangra" ,"kathakali" ,
 "kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
 
-    if @keywords.any? { |w| text =~ /#{w}/ }
+    if @keywords.any? { |w| @text =~ /#{w}/ }
       @matches = []
-      @keywords.each do |kywd| text.match(kywd) != nil ? @matches << text.match(kywd) : "nothing"
+      @keywords.each do |kywd| @text.match(kywd) != nil ? @matches << kywd : "nothing"
         end
-    return @matches
     else
       puts "nope."
     end
+
+    "Keywords found: {#@matches}"
 
   end #get_text method end
   get_text('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
