@@ -63,7 +63,6 @@ class App < Sinatra::Base
             $add_em =[page.title,page.url,page.description]
            #  CSV.open("urls-3.csv", "a+")do |csv|
             @test << $add_em
-            $urls << page.url
               
              end
             "look at #{@test}"
@@ -83,41 +82,28 @@ end
 post '/links' do
     def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
-    #example uses Nokogiri css selectors to find links on this specific page; this will only work with the example link
-
-   #    @doc = Nokogiri::HTML(open(this_page))
-   #    #find href, return class, input
-   #    @links = @doc.css('a')
-   #    @hrefs = @links.map {|link| link.attribute('href')}
-   #    "look at #{@hrefs}"
-   #   # @links = @doc.css('h1 a').map { |link| link['href'] }
-      
-   #   # get_descriptions(@links)
-   #    #start extracting methods from app.rb
-      
-   #    # CSV.open("links.csv", "w")do |csv|
-   #    #   links.each do |link|
-   #    #     csv << [link]
-   #    #   end
-   #    # end
-   # end
-   #$text_page << get_links('http://bayareandw.org/')
-  # "here is #{$text_page}"
-   #@links.class
-
    #just use mechanize
    # FIX: links from found pages aren't complete and mechanize won't like them; use attribute from get_desc
       pages.each {|eek| 
-       agent = Mechanize.new
+       agent = Mechanize.new 
+
+       begin
        page = agent.get(eek)
+         rescue Mechanize::ResponseCodeError => exception
+          if exception.response_code == '403' || exception.response_code == '404'
+            puts exception.to_s
+          end
        page.links.each do |link|
       $text_page << link.text
-      end}
-  "here is #{$text_page}"
+        end
+        end
+    }
+
+  "Found links: #{$text_page}"
     end
      get_links($urls)  #using links from getdesc
      #mechanize exits on errors
-end #end post /links
+  end #end post /links
 
 get '/gettext' do
     erb :gettext
