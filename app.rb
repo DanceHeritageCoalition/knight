@@ -110,9 +110,6 @@ get '/gettext' do
 end
 
 post '/text' do
-erb :presults
-
-
   #get text
 
   def get_text(text_page)
