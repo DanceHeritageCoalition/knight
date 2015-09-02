@@ -63,9 +63,14 @@ end
             $add_em =[page.title,page.url,page.description]
            #  CSV.open("urls-3.csv", "a+")do |csv|
             @test << $add_em
-              
+            if page.url.include?('facebook')
+              puts "garbage"
+            else
+              $urls << page.url
              end
+           end
             "Here are descriptions #{@test}"
+            "Here are page urls #{$urls}"
           end
        # end
       
@@ -83,26 +88,31 @@ post '/links' do
     def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
    #just use mechanize
-   # FIX: links from found pages aren't complete and mechanize won't like them; use attribute from get_desc
-      pages.each {|eek| 
-       agent = Mechanize.new 
+      #exclude facebook pages
 
+      pages.each {|pg| 
        begin
-       page = agent.get(eek)
-         rescue Mechanize::ResponseCodeError => exception
-          if exception.response_code == '403' || exception.response_code == '404'
-            puts exception.to_s
-          end
-       page.links.each do |link|
-        $text_page << link.text
+       mech = Mechanize.new 
+       @page = mech.get(pg)
+        # rescue Mechanize::ResponseCodeError => exception
+        #   if exception.response_code == '404'
+        rescue Mechanize::ResponseCodeError => e
+        @page = e.force_parse
+        #    puts exception.to_s
+           #mechanize exits on errors
         end
+       @page.links.each do |link|
+        $text_page << link.text
       end
+          
+        #end mechanize rescue begin
+      
     }
 
   "Found links: #{$text_page}"
     end
      get_links($urls)  #using links from getdesc
-     #mechanize exits on errors
+     
   end #end post /links
 
 get '/gettext' do
@@ -141,12 +151,13 @@ post '/text' do
 end #post '/text end'
 
 #return screenshots
-get '/screenshots'
+get '/screenshots' do
   def screenshots(urls)
 
     $urls.each do |url|
     @f = Screencap::Fetcher.new('#{url}')
     @screenshot = f.fetch
+  end
   end
 
 end
