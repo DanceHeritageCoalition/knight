@@ -86,8 +86,8 @@ end
             # if page.url.include?('facebook')
             #   puts "garbage"
             # else
-            #   $urls << page.url
-            #  end
+              $urls << page.url
+             # end
            end
             #"Here are descriptions #{@test}"
             #"Here are page urls #{$urls}"
@@ -108,35 +108,43 @@ end
 end
 
 post '/links' do
+    @url = params[:links].values[0]
     def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
    #just use mechanize
       #exclude facebook pages
 
-      pages.each {|pg| 
-       begin
+      # pages.each do |pg| 
+      #  begin
        mech = Mechanize.new 
-       @page = mech.get(pg)
-        # rescue Mechanize::ResponseCodeError => exception
-        #   if exception.response_code == '404'
-        rescue Mechanize::ResponseCodeError => e
-        @page = e.force_parse
-        #    puts exception.to_s
-           #mechanize exits on errors
-        end
-       @page.links.each do |link|
-        $text_page << link.text
-      end
-          
-        #end mechanize rescue begin
-      
-    }
-
-  "Found links: #{$text_page}"
-    end
-     get_links($urls)  #using links from getdesc
-     
+       page = mech.get(@url)
+        # # rescue Mechanize::ResponseCodeError => exception
+        # #   if exception.response_code == '404'
+        # rescue Mechanize::ResponseCodeError => e
+        # #page = e.force_parse
+        # puts e.to_s
+        # #    #mechanize exits on errors
+        # else 
+          page.links.each do |link|
+          $text_page << link, link.text
+          end #end page links
+        
+        #end #end rescue
+          # page.links.each {|link| puts "#{link.text} => #{link.href}"}
+        #end #end pages each
+        # end
+  end #end get_links
+    #end
+     get_links(@url)  #using links from getdesc
+     "Found links: #{$text_page}"
   end #end post /links
+
+  #redirect '/link_results'
+# end
+
+  get '/link_results' do
+    erb :link_results
+  end
 
 get '/gettext' do
     erb :gettext
@@ -172,6 +180,10 @@ post '/text' do
 
 
 end #post '/text end'
+
+get '/text_results' do
+  erb :text_results
+end
 
 #return screenshots
 get '/screenshots' do
