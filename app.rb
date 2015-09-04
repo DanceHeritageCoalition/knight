@@ -23,6 +23,7 @@ $css_element = []
 $text_page = []
 $add_em = []
 $links = []
+$matches = []
 
 class App < Sinatra::Base
  
@@ -168,19 +169,19 @@ post '/text' do
 "kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
 
     if @keywords.any? { |w| @text =~ /#{w}/ }
-      @matches = []
-      @keywords.each do |kywd| @text.match(kywd) != nil ? @matches << kywd : "nothing"
+      
+      @keywords.each do |kywd| @text.match(kywd) != nil ? $matches << kywd : "nothing"
         end
     else
       puts "nope."
     end
 
-    "Keywords found: {#@matches}"
+   # "Keywords found: {#@matches}"
 
   end #get_text method end
   get_text('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
 
-
+  redirect '/text_results'
 end #post '/text end'
 
 get '/text_results' do
