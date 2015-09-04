@@ -22,6 +22,7 @@ $found_pages = []
 $css_element = []
 $text_page = []
 $add_em = []
+$links = []
 
 class App < Sinatra::Base
  
@@ -125,18 +126,19 @@ post '/links' do
         # puts e.to_s
         # #    #mechanize exits on errors
         # else 
-          page.links.each do |link|
-          $text_page << link, link.text
-          end #end page links
-        
+          # page.links.each do |link|
+          # $text_page << [link, link.text]
+          # end #end page links
+        #@links = page.links
         #end #end rescue
-          # page.links.each {|link| puts "#{link.text} => #{link.href}"}
+        page.links.each {|link| $links << "#{link.text}, #{link.href}"}
         #end #end pages each
         # end
-  end #end get_links
+    end #end get_links
     #end
      get_links(@url)  #using links from getdesc
-     "Found links: #{$text_page}"
+    
+      redirect :link_results
   end #end post /links
 
   #redirect '/link_results'
