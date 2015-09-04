@@ -21,6 +21,7 @@ $urls = []
 $found_pages = []
 $css_element = []
 $text_page = []
+$add_em = []
 
 class App < Sinatra::Base
  
@@ -72,27 +73,33 @@ end
     
         def get_descriptions(urls)
             
-            CSV.open("urls-3.csv", "wb")do |csv|
-            csv << ["page title", "url", "description"]
-            end
+            # CSV.open("urls-3.csv", "wb")do |csv|
+            # csv << ["page title", "url", "description"]
+            # end
           @test = []
+
            urls.each do |url|
             page = MetaInspector.new(url, :connection_timeout => 1, :read_timeout => 2, :retries => 0, warn_level: :store)
-            $add_em =[page.title,page.url,page.description]
-           #  CSV.open("urls-3.csv", "a+")do |csv|
-            @test << $add_em
-            if page.url.include?('facebook')
-              puts "garbage"
-            else
-              $urls << page.url
-             end
+            @test =[page.title,page.url,page.description]
+
+           $add_em << @test
+            # if page.url.include?('facebook')
+            #   puts "garbage"
+            # else
+            #   $urls << page.url
+            #  end
            end
-            "Here are descriptions #{@test}"
+            #"Here are descriptions #{@test}"
             #"Here are page urls #{$urls}"
           end
        # end
       get_descriptions($found_pages)
+      redirect "/desc_results"
   end #end post /getdesc
+
+  get '/desc_results' do
+    erb :desc_results
+  end
 
 #get links
 
