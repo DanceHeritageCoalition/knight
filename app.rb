@@ -199,20 +199,11 @@ end
 get '/screenshots' do
   def screenshots()
 
-    f = Screencap::Fetcher.new('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
-    screenshot = f.fetch(
-    :output => '/image.png', # don't forget the extension!
-    # optional:
-    :div => '.header', # selector for a specific element to take screenshot of
-    :width => 1024,
-    :height => 768,
-    :top => 0, :left => 0, :width => 100, :height => 100 # dimensions for a specific area
-  )
-  end
+    f = Screencap::Fetcher.new('http://dancetabs.com/2015/06/the-royal-ballet-the-dream-song-of-the-earth-new-york/')
   screenshots()
   erb :screenshot
 end
-
+end
 
 #   #crawler
 #   def crawler()
