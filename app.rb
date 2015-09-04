@@ -1,3 +1,15 @@
+#add text to homepage
+#add header image
+#add button labels
+#add buttons to home
+#make results hyperlinks
+#redirect from search to getdesc
+#
+#add results page for each query via redirect
+#clear sample URLs in posts
+
+
+
 require 'sinatra'
 require 'open-uri'
 require 'csv'
@@ -38,7 +50,6 @@ end
      @doc.css('cite').each do |cite|
       $found_pages << cite.text
      end
-    # "Here are the keywords #{$keywords[0]}"
     "Here are found pages #{$found_pages}"
   end #for /search
 
@@ -70,11 +81,9 @@ end
              end
            end
             "Here are descriptions #{@test}"
-            "Here are page urls #{$urls}"
+            #"Here are page urls #{$urls}"
           end
        # end
-      
-
       get_descriptions($found_pages)
   end #end post /getdesc
 
