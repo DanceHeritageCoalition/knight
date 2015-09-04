@@ -190,15 +190,23 @@ end
 
 #return screenshots
 get '/screenshots' do
-  def screenshots(urls)
+  def screenshots()
 
-    $urls.each do |url|
-    @f = Screencap::Fetcher.new('#{url}')
-    @screenshot = f.fetch
+    f = Screencap::Fetcher.new('http://dancetabs.com/2012/04/chitresh-das-dance-company-darbar-san-francisco/')
+    screenshot = f.fetch(
+    :output => '/image.png', # don't forget the extension!
+    # optional:
+    :div => '.header', # selector for a specific element to take screenshot of
+    :width => 1024,
+    :height => 768,
+    :top => 0, :left => 0, :width => 100, :height => 100 # dimensions for a specific area
+  )
   end
-  end
-
+  screenshots()
+  erb :screenshot
 end
+
+
 #   #crawler
 #   def crawler()
 #   #get links, scrape description, check for keywords, go to site, return new URL, stop
