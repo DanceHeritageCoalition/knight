@@ -41,6 +41,7 @@ end
     @keywords_incl1 = params[:words].values.join("+").to_s
 
     "https://www.google.com/search?num=10&q=" + "#{$keywords[0]}"
+    redirect "/search"
     end
 
    get '/search' do
@@ -50,11 +51,17 @@ end
      @doc.css('cite').each do |cite|
       $found_pages << cite.text
      end
-    "Here are found pages #{$found_pages}"
+    #"Here are found pages #{$found_pages}"
+    redirect '/scrape_results'
   end #for /search
+
+  get '/scrape_results' do
+    erb :scrape_results
+  end
 
   get '/getdesc' do
     erb :getdesc
+    #redirect "/desc_results"
 
   end
 
