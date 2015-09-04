@@ -153,6 +153,7 @@ get '/gettext' do
     erb :gettext
 end
 
+$text = []
 post '/text' do
   #get text
 
@@ -160,7 +161,8 @@ post '/text' do
 #   #go to each link from get_links, scrape text;
 #   #open csv, each row, new csv, add columns
   @doc = Nokogiri::HTML(open(text_page))
-  @text = @doc.css('p').text
+  $text = @doc.css('p').text
+  $img = @doc.css('img')
   @keywords = ["pow wow", "Royal", "ballet","hula"  ,"hip hop" ,"two step"  ,"waltz" ,"polka" ,"bharatanatyam" ,"bharata natyam"  ,
 "ballerina" , "jazz", "breakdancing"  ,"salsa" ,"meringue"  ,"flamenco"  ,"contradanse" ,"contradanc*" ,"western squares" ,"ballroom"  ,"capoeira"  ,
 "danc*","go-go" ,"pirouette" ,"arabesque" ,"kathak"  ,"b-boying"  ,"gangnum" ,"tap" ,"electric slide"  ,"moonwalk"  ,"tango" ,"mambo" ,"twist" ,
@@ -168,9 +170,9 @@ post '/text' do
 "electric boogaloo" ,"stepping","jig" ,"clogging"  ,"shim sham" ,"foxtrot" ,"butoh" ,"tarantella"  ,"swing" ,"bhangra" ,"kathakali" ,
 "kuchipudhi"  ,"Mohiniyattam"  ,"Odissi"  ,"Sattriya"  ,"garba"]
 
-    if @keywords.any? { |w| @text =~ /#{w}/ }
+    if @keywords.any? { |w| $text =~ /#{w}/ }
       
-      @keywords.each do |kywd| @text.match(kywd) != nil ? $matches << kywd : "nothing"
+      @keywords.each do |kywd| $text.match(kywd) != nil ? $matches << kywd : "nothing"
         end
     else
       puts "nope."
@@ -186,6 +188,11 @@ end #post '/text end'
 
 get '/text_results' do
   erb :text_results
+end
+
+
+get '/show_text' do
+  erb :show_text
 end
 
 #return screenshots
