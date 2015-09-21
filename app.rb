@@ -15,7 +15,7 @@ require 'open-uri'
 require 'csv'
 require 'bundler'
 
-$keywords = []
+$keywords = ['bay','area']
 $exclude = []
 $urls = []
 $found_pages = []
