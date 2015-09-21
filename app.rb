@@ -56,7 +56,7 @@ end
      end
 
      @exclude = ['yelp', 'linkedin', 'facebook']
-    $found_pages.delete_if {|pg| pg.include?('yelp' || 'linkedin' || 'facebook')
+    $found_pages.delete_if {|pg| pg.include?('yelp' || 'linkedin' || 'facebook')}
     #"Here are found pages #{$found_pages}"
     redirect '/scrape_results'
   end #for /search
