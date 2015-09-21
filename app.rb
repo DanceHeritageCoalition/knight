@@ -15,7 +15,7 @@ require 'open-uri'
 require 'csv'
 require 'bundler'
 
-$keywords = ['bay','area']
+$keywords = []
 $exclude = []
 $urls = []
 $found_pages = []
@@ -39,9 +39,9 @@ end
   end
 
   post '/' do
-   $keywords << params[:words].values.join("+").to_s
+   $keywords << params[:words].values.join("+").to_s + 'bay' + 'area'
   #  $exclude << params[:words][0].values[1]
-    @keywords_incl1 = params[:words].values.join("+").to_s
+    #@keywords_incl1 = params[:words].values.join("+").to_s
 
     "https://www.google.com/search?num=10&q=" + "#{$keywords[0]}"
     redirect "/search"
