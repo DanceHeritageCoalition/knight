@@ -1,0 +1,11 @@
+<div class="well col-md-3">
+<form action "/linkchx" method="POST">
+  <label>Keyword 1:</label>
+  <ul>
+    <% $found_pages.each do |page| %>
+  <li><input type="checkbox" name="sites[]" value= '#{page}'</li><%= page %>
+  <%end %>
+  <li><input type="checkbox" name="sites[]" value='#{$found_pages[1]'>  </li>
+<button type="submit">Submit</button>
+  </form>
+</div>

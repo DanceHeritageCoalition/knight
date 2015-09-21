@@ -55,7 +55,7 @@ end
       $found_pages << cite.text
      end
 
-     @exclude = ['yelp', 'linkedin', 'facebook']
+     #@exclude = ['yelp', 'linkedin', 'facebook']
     $found_pages.delete_if {|pg| pg.include?('yelp' || 'linkedin' || 'facebook')}
     #"Here are found pages #{$found_pages}"
     redirect '/scrape_results'
@@ -109,7 +109,7 @@ end
 #get links
 
  get '/getlinks' do
-    erb :getlinks
+    erb :linkchx
 end
 
 post '/links' do
@@ -142,7 +142,7 @@ post '/links' do
     #end
      get_links(@url)  #using links from getdesc
     
-      redirect :link_results
+      redirect :linkchecks
   end #end post /links
 
   #redirect '/link_results'
@@ -150,6 +150,10 @@ post '/links' do
 
   get '/link_results' do
     erb :link_results
+  end
+
+  post '/linkchx' do
+    "here are checked sites #{params['sites']}"
   end
 
 get '/gettext' do
