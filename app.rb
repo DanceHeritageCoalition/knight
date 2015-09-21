@@ -24,6 +24,7 @@ $text_page = []
 $add_em = []
 $links = []
 $matches = []
+$selected_sites = []
 
 class App < Sinatra::Base
  
@@ -112,8 +113,13 @@ end
     erb :linkchx
 end
 
-post '/links' do
-    @url = params[:links].values[0]
+ post '/getlinks' do
+
+    params[:sites].each do |val| $selected_sites << $urls[val.to_i]
+    end
+
+    $selected_sites.each do |site|
+    @url = site
     def get_links(pages)
     #Go to specified URL, scrape links/descriptions for new URLs
    #just use mechanize
@@ -139,10 +145,11 @@ post '/links' do
         #end #end pages each
         # end
     end #end get_links
+  end
     #end
      get_links(@url)  #using links from getdesc
     
-      redirect :linkchecks
+      redirect :link_results
   end #end post /links
 
   #redirect '/link_results'
@@ -152,9 +159,7 @@ post '/links' do
     erb :link_results
   end
 
-  post '/linkchx' do
-    "here are checked sites #{params['sites']}"
-  end
+ 
 
 get '/gettext' do
     erb :gettext
