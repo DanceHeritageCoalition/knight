@@ -139,7 +139,8 @@ end
           # end #end page links
         #@links = page.links
         #end #end rescue
-        page.links.each {|link| $links << "#{link.text}, #{link.href}"}
+        page.links.each do |link| link.href.to_s.include? newpage ? "skip" : ($links << "#{link.text}, #{link.href}")
+        end
         #end #end pages each
         # end
       end #end get_links
