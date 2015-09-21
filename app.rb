@@ -118,9 +118,7 @@ end
     params[:sites].each do |val| $selected_sites << $urls[val.to_i]
     end
 
-    $selected_sites.each do |site|
-    @url = site
-    def get_links(pages)
+    def get_links(newpage)
     #Go to specified URL, scrape links/descriptions for new URLs
    #just use mechanize
       #exclude facebook pages
@@ -128,7 +126,7 @@ end
       # pages.each do |pg| 
       #  begin
        mech = Mechanize.new 
-       page = mech.get(@url)
+       page = mech.get(newpage)
         # # rescue Mechanize::ResponseCodeError => exception
         # #   if exception.response_code == '404'
         # rescue Mechanize::ResponseCodeError => e
@@ -144,10 +142,13 @@ end
         page.links.each {|link| $links << "#{link.text}, #{link.href}"}
         #end #end pages each
         # end
-    end #end get_links
-  end
+      end #end get_links
+    end
+
+    $selected_sites.each do |site|
+    get_links(site)
+    end
     #end
-     get_links(@url)  #using links from getdesc
     
       redirect :link_results
   end #end post /links
