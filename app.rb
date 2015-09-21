@@ -118,7 +118,7 @@ end
     params[:sites].each do |val| $selected_sites << $urls[val.to_i]
     end
 
-    def get_links(newpage)
+     def get_links(newpage)
     #Go to specified URL, scrape links/descriptions for new URLs
    #just use mechanize
       #exclude facebook pages
@@ -143,7 +143,7 @@ end
         #end #end pages each
         # end
       end #end get_links
-    end
+
 
     $selected_sites.each do |site|
     get_links(site)
